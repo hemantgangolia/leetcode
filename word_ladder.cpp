@@ -1,11 +1,26 @@
-#include <iostream>
-#include <queue>
-#include <set>
-#include <map>
-#include <vector>
+/*
+https://oj.leetcode.com/problems/word-ladder/
 
-using namespace std;
-void getNextWords(string str, vector<string> &my_set, set<string> &dict) {
+Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start to end, such that:
+
+Only one letter can be changed at a time
+Each intermediate word must exist in the dictionary
+For example,
+Given:
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+
+Note:
+Return 0 if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+*/
+class Solution {
+public:
+    void getNextWords(string str, vector<string> &my_set, unordered_set<string> &dict) {
         string temp = str;
         for (int i = 0; i < str.length(); i++) {
             for (char j = 'a'; j <= 'z'; j++) {
@@ -29,7 +44,7 @@ void getNextWords(string str, vector<string> &my_set, set<string> &dict) {
         return true;
     }
     
-    int ladderLength(string start, string end, set<string> &dict) {
+    int ladderLength(string start, string end, unordered_set<string> &dict) {
         if (valid(start,end)){return 2;}
         if (start == end) return 0;
         queue<pair<string, int> > left, right;
@@ -37,7 +52,7 @@ void getNextWords(string str, vector<string> &my_set, set<string> &dict) {
         right.push(pair<string, int> (end, 0));
         vector<string> temp;
         
-        set<string>::const_iterator got = dict.find(start);
+        unordered_set<string>::const_iterator got = dict.find(start);
         if (got != dict.end()) {
             dict.erase(start);
         }
@@ -47,7 +62,7 @@ void getNextWords(string str, vector<string> &my_set, set<string> &dict) {
         }
         
         map<string, int> l_map, r_map;
-        for (set<string>::iterator it = dict.begin(); it != dict.end(); it++) {
+        for (auto it = dict.begin(); it != dict.end(); it++) {
             l_map[*it] = r_map[*it] = 0;
         }
         
@@ -81,18 +96,4 @@ void getNextWords(string str, vector<string> &my_set, set<string> &dict) {
         }
         return 0;
     }
-
-int main () {
-    set<string> dict;
-    dict.insert("b");
-    set<string> temp;
-    // getNextWords("a", temp, dict);
-    // for (set<string>::iterator it = temp.begin(); it != temp.end(); it++) {
-    //     cout << *it << endl;
-    // }
-    dict.insert("a");
-    dict.insert("c");
-
-    cout << ladderLength("a", "c", dict) << endl;
-    return 0;
-}
+};
